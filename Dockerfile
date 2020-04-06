@@ -1,8 +1,8 @@
 FROM alpine:3
 
-RUN	set -x && \
-	  apk --no-cache update && \
-	  apk add --no-cache rsyslog rsyslog-elasticsearch
+RUN set -x && \
+    apk --no-cache update && \
+    apk add --no-cache rsyslog rsyslog-elasticsearch
 
 RUN set -x && \
     mkdir -p /logs/rsyslog
