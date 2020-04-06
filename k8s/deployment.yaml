@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rsyslog
+  labels:
+    app: rsyslog
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: rsyslog
+  template:
+    metadata:
+      labels:
+        app: rsyslog
+    spec:
+      containers:
+      - image: commontools/rsyslog:latest
+        name: rsyslog
+        ports:
+        - containerPort: 514
+          name: syslog
+          protocol: UDP
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "500m"
+          limits:
+            memory: "500Mi"
+            cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rsyslog
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: UDP
+    port: 514
+  selector:
+    app: rsyslog
